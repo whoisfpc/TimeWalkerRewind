@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class EnergybubbleController : MonoBehaviour {
@@ -7,6 +8,7 @@ public class EnergybubbleController : MonoBehaviour {
 	private float speed = 50.0f;
 	private float maxspeed = 80.0f;
 	private float accelerate = 30.0f;
+	[NonSerialized]
 	public Transform playerTran;
 	private GameObject restoreEffect;
 	// Use this for initialization

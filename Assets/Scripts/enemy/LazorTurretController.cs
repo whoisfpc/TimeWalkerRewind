@@ -3,7 +3,7 @@ using System.Collections;
 
 public class LazorTurretController : MonoBehaviour {
 
-	private GameObject laser;
+	public GameObject laser;
 	private GameObject curLaser;
 	public float angle = 90.0f;
 	public float rotateSpeed = 20.0f;
@@ -16,7 +16,7 @@ public class LazorTurretController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		laser = (GameObject)Resources.Load ("effects/Line/Line");
+		// laser = (GameObject)Resources.Load ("effects/Line/Line");
 		curLaser = Instantiate (laser, transform.position, Quaternion.FromToRotation (Vector3.forward, Vector3.down))as GameObject;
 		curAngle = iniAngle;
 

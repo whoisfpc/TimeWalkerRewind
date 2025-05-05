@@ -26,7 +26,6 @@ public class BossFSM : FSM
 
     //Speed of the tank
 	public float chargeForce = 40000.0f;
-    private float curSpeed;
 	private bool inBattle = false;
 
     //Bullet
@@ -37,11 +36,11 @@ public class BossFSM : FSM
 	public GameObject footman;
 	public float patrolDistance = 100.0f;
 
-    private GameObject enemybullet;
-	private GameObject razor;
+    public GameObject enemybullet;
+	public GameObject razor;
+	public GameObject missileExplode;
 	private GameObject curRazor;
 	private GameObject portal;
-	private GameObject missileExplode;
 	private Transform eye;
 	private Transform shooter;
 	private Transform launcherLeft;
@@ -54,7 +53,6 @@ public class BossFSM : FSM
 	private bool rightSideCollision = false;
 	private bool hitPlayer = false;
 	private float curPatrolDistance = 0.0f;
-	private Vector3 tempCastPosition;
 	private bool inOperation = false;
 	private float scaledTime =0.0f;
 	private bool operateDead = false;
@@ -79,17 +77,11 @@ public class BossFSM : FSM
 		portal = GameObject.Find ("portal");
 		portal.SetActive (false);
 
-		razor = (GameObject)Resources.Load ("effects/Line/Line");
-		enemybullet = (GameObject)Resources.Load ("Prefebs/enemybullet");
-		missile = (GameObject)Resources.Load ("Prefebs/missile");
-		missileExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
-
 		eye = transform.Find ("Enemy2").Find ("Body").Find ("eye");
 		shooter = transform.Find ("Enemy2").Find ("Body").Find ("shooter");
 		launcherLeft = transform.Find ("Enemy2").Find ("Body").Find ("LauncherLeft");
 		launcherRight = transform.Find ("Enemy2").Find ("Body").Find ("LauncherRight");
 
-		scaledTime = Time.time;
 
 		gameObject.GetComponent<EnemyController> ().isBoss = true;
 	}
@@ -102,7 +94,6 @@ public class BossFSM : FSM
 		health = gameObject.GetComponent<EnemyController>().health;
 		getSideCollision ();
 
-		scaledTime += Time.deltaTime * curTimeScale;
 
 		//health = gameObject.GetComponent<enemyController> ().health;
 

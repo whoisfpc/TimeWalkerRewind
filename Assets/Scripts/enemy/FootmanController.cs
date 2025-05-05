@@ -9,7 +9,7 @@ public class FootmanController : MonoBehaviour {
 	private TimeFieldController timefieldController;
 	private float curTimeScale;
 	private Animator anim;
-	private GameObject footmanExplode;
+	public GameObject footmanExplode;
 	private Animator footmanAnim;
 
 	private bool startMoving = false;
@@ -27,7 +27,7 @@ public class FootmanController : MonoBehaviour {
 		curTimeScale = timefieldController.getTimescale (transform.position);
 		footmanAnim = transform.Find ("Enemy2").GetComponent<Animator> ();
 
-		footmanExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
+		// footmanExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
 
 		leftSide = transform.Find ("LeftSide").gameObject;
 		rightSide = transform.Find ("RightSide").gameObject;

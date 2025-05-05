@@ -8,11 +8,11 @@ public class EnemyController : MonoBehaviour {
 	public int health{ get; private set;}
 	public int attack = 10;
 	public int creatEnergyBubble = 5;
-	private GameObject energybubble;
+	public GameObject energybubble;
 	public bool isBoss = false;
 	// Use this for initialization
 	void Start () {
-		energybubble = (GameObject)Resources.Load ("Prefebs/energybubble");
+		// energybubble = (GameObject)Resources.Load ("Prefebs/energybubble");
 		health = maxHealth;
 	}
 
@@ -30,9 +30,9 @@ public class EnemyController : MonoBehaviour {
 			//gameObject.GetComponent<Rigidbody2D> ().AddForce (force);
 			if (!isBoss) {
 				if(health == 0){
-					energybubble.GetComponent<EnergybubbleController> ().playerTran = source.transform;
 					for (int i=0;i<creatEnergyBubble;i++){
-						Instantiate(energybubble,transform.position+new Vector3(Random.Range(-10.0f,10.0f),Random.Range(-10.0f,10.0f),0.0f),Quaternion.FromToRotation(Vector3.right,new Vector3(Random.Range(-1.0f,1.0f),Random.Range(-1.0f,1.0f),0.0f)));
+						var bubble = Instantiate(energybubble,transform.position+new Vector3(Random.Range(-10.0f,10.0f),Random.Range(-10.0f,10.0f),0.0f),Quaternion.FromToRotation(Vector3.right,new Vector3(Random.Range(-1.0f,1.0f),Random.Range(-1.0f,1.0f),0.0f)));
+						bubble.GetComponent<EnergybubbleController>().playerTran = source.transform;
 					}
 					Destroy(this.gameObject);
 				}

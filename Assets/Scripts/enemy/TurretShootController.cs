@@ -5,7 +5,7 @@ public class TurretShootController : MonoBehaviour {
 
 	private Transform playerTran;
 	private GameObject[] players;
-	private GameObject enemybullet;
+	public GameObject enemybullet;
 	private TimeFieldController timefieldController;
 	public float searchRadius = 120.0f;
 	private float curTimeScale;
@@ -22,7 +22,7 @@ public class TurretShootController : MonoBehaviour {
 		//playerTran = GameObject.FindGameObjectWithTag ("Player").transform;
 		players = GameObject.FindGameObjectsWithTag ("Player");
 		playerTran = FindPlayerTran ();
-		enemybullet = (GameObject)Resources.Load ("Prefebs/enemybullet");
+		// enemybullet = (GameObject)Resources.Load ("Prefebs/enemybullet");
 		predictPosition = playerTran.position;
 		headTran = transform;
 		scaledTime = Time.time;

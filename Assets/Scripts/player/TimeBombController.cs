@@ -8,7 +8,7 @@ public class TimeBombController : MonoBehaviour {
 	public GameObject TimeBomb;
 	// Use this for initialization
 	void Start () {
-		TimeBomb = (GameObject)Resources.Load ("Prefebs/TimeBomb");
+		// TimeBomb = (GameObject)Resources.Load ("Prefebs/TimeBomb");
 	}
 	
 	// Update is called once per frame

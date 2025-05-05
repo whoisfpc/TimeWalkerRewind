@@ -3,7 +3,7 @@ using System.Collections;
 
 public class VerticalTurretController : MonoBehaviour {
 
-	private GameObject laser;
+	public GameObject laser;
 	private GameObject curLaser;
 
 	public float activateTime = 3.0f;
@@ -17,7 +17,7 @@ public class VerticalTurretController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		laser = (GameObject)Resources.Load ("effects/Line/Line");
+		// laser = (GameObject)Resources.Load ("effects/Line/Line");
 		curLaser = Instantiate (laser, transform.position + transform.up * 5.0f, Quaternion.FromToRotation (Vector3.forward, transform.up))as GameObject;
 
 		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();

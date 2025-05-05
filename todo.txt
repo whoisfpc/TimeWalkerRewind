@@ -1,7 +1,8 @@
-- 提供更好的代码结构
-- 去除多人模式（待定）
-- 接入inputsystem 提供键鼠和手柄绑定
-- 接入wwise（学下怎么用）
-- 接入addressable，移除resource依赖
-- 使用ldtk或者unity的tiles编辑地图
-- 使用sbp指定自定义build流程
+- [ ] 提供更好的代码结构
+- [ ] 去除多人模式（待定）
+- [ ] 接入inputsystem 提供键鼠和手柄绑定
+- [ ] 接入wwise（学下怎么用）
+- [ ] 接入addressable
+- [ ] 使用ldtk或者unity的tiles编辑地图
+- [ ] 使用sbp指定自定义build流程
+- [x] 移除resource依赖

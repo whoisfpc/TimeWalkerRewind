@@ -6,6 +6,7 @@ public class TrapBomb : MonoBehaviour {
 	public Sprite preBoomSprite;
 	public float boomDelay = 0.3f;
 	public float boomArea = 30f;
+	public GameObject footmanExplode;
 
 	private TimeFieldController timefieldController;
 	private float curTimeScale;
@@ -15,7 +16,6 @@ public class TrapBomb : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		preBoomSound = GetComponent<AudioSource> ();
-
 		formerTimeScale = 1.0f;
 		curTimeScale = 1.0f;
 		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
@@ -39,7 +39,7 @@ public class TrapBomb : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D coll) {
-		if (coll.gameObject.tag == "Player") {
+		if (coll.gameObject.CompareTag("Player")) {
 			StartCoroutine (Boom(coll.gameObject));
 		}
 	}
@@ -57,7 +57,7 @@ public class TrapBomb : MonoBehaviour {
 				players[i].GetComponent<PlayerController> ().takeDamage (10, Vector3.zero);
 			}
 		}
-		GameObject footmanExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
+		// GameObject footmanExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
 		Instantiate (footmanExplode, transform.position, Quaternion.identity);
 		Destroy (this.gameObject);
 	}

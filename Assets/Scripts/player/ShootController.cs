@@ -30,12 +30,12 @@ public class ShootController : MonoBehaviour {
 		if (!isPause && !isDead) {
 			if (Time.time > nextfire) {
 				if (Input.GetButton(fireStr)) {
-					bullet.GetComponent<BulletController> ().source = gameObject;
 					if (!useJoystick) {
 						Vector3 mousePosition = MainCamera.ScreenToWorldPoint (Input.mousePosition);
 						mousePosition.z = 0.0f;
 						gunTran = gun.transform;
-						Instantiate (bullet, gunTran.position, Quaternion.FromToRotation (Vector3.right, mousePosition - gunTran.position));
+						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.FromToRotation (Vector3.right, mousePosition - gunTran.position));
+						bulletInst.GetComponent<BulletController> ().source = gameObject;
 					} else {
 						float y = Input.GetAxis ("Aim_Y_P2");
 						float x = Input.GetAxis ("Aim_X_P2");
@@ -49,7 +49,8 @@ public class ShootController : MonoBehaviour {
 						}
 						float angle = Mathf.Atan2 (y, x) * Mathf.Rad2Deg;
 						gunTran = gun.transform;
-						Instantiate (bullet, gunTran.position, Quaternion.Euler (new Vector3 (0, 0, angle)));
+						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.Euler (new Vector3 (0, 0, angle)));
+						bulletInst.GetComponent<BulletController> ().source = gameObject;
 					}
 					nextfire = Time.time + fireRate;
 

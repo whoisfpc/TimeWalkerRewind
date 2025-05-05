@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Collections;
 
 public class BulletController : MonoBehaviour {
@@ -8,20 +9,21 @@ public class BulletController : MonoBehaviour {
 	private TimeFieldController timefieldController;
 	public float lifetime = 5.0f;
 	private float life = 0.0f;
-	private GameObject bursteffect;
+	public GameObject bursteffect;
 
 	private Sprite sprite;
 	private int width;
 	private int height;
 	private int ox;
 	private int oy;
+	[NonSerialized]
 	public GameObject source; // who shoot the bullet
 
 	// Use this for initialization
 	void Start () {
 		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
 		truespeed = speed * timefieldController.getTimescale (transform.position);
-		bursteffect = (GameObject)Resources.Load ("RocketExplosion");
+		// bursteffect = (GameObject)Resources.Load ("RocketExplosion");
 	}
 	
 	// Update is called once per frame

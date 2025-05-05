@@ -16,14 +16,14 @@ public class MissileController : MonoBehaviour {
 	private TimeFieldController timefieldController;
 	private float curTimeScale;
 
-	private GameObject missileExplode;
+	public GameObject missileExplode;
 
 	// Use this for initialization
 	void Start () {
 		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
 		int tempIndex = Random.Range (0, players.Length);
 		playerTran = players[tempIndex].transform;
-		missileExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
+		// missileExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
 
 
 		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
