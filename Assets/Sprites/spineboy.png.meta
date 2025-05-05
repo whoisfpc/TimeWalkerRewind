@@ -1,0 +1,423 @@
+fileFormatVersion: 2
+guid: 132f3ec44015a6442ad593e8bfc9d8d0
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 21300000
+    second: spineboy_body
+  - first:
+      213: 21300002
+    second: spineboy_RightUpLeg
+  - first:
+      213: 21300004
+    second: spineboy_RightArm
+  - first:
+      213: 21300006
+    second: spineboy_LeftArm
+  - first:
+      213: 21300008
+    second: spineboy_RightFoot
+  - first:
+      213: 21300010
+    second: spineboy_RightLeg
+  - first:
+      213: 21300012
+    second: spineboy_RightHand
+  - first:
+      213: 21300014
+    second: spineboy_Head
+  - first:
+      213: 21300016
+    second: spineboy_LeftHand
+  - first:
+      213: 21300018
+    second: spineboy_LeftFoot
+  - first:
+      213: 21300020
+    second: spineboy_LeftUpLeg
+  - first:
+      213: 21300022
+    second: spineboy_hip
+  - first:
+      213: 21300024
+    second: spineboy_LeftLeg
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 16
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: spineboy_body
+      rect:
+        serializedVersion: 2
+        x: 2
+        y: 4
+        width: 157
+        height: 122
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 02305410000000000800000000000000
+      internalID: 21300000
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_RightUpLeg
+      rect:
+        serializedVersion: 2
+        x: 438
+        y: 4
+        width: 79
+        height: 110
+      alignment: 9
+      pivot: {x: 0.40409136, y: 0.7295989}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 22305410000000000800000000000000
+      internalID: 21300002
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_RightArm
+      rect:
+        serializedVersion: 2
+        x: 519
+        y: 4
+        width: 71
+        height: 119
+      alignment: 9
+      pivot: {x: 0.5533576, y: 0.7546813}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 42305410000000000800000000000000
+      internalID: 21300004
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_LeftArm
+      rect:
+        serializedVersion: 2
+        x: 745
+        y: 4
+        width: 77
+        height: 105
+      alignment: 9
+      pivot: {x: 0.69679874, y: 0.8126918}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 62305410000000000800000000000000
+      internalID: 21300006
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_RightFoot
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 83
+        width: 60
+        height: 41
+      alignment: 9
+      pivot: {x: 0.24744059, y: 0.46919978}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 82305410000000000800000000000000
+      internalID: 21300008
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_RightLeg
+      rect:
+        serializedVersion: 2
+        x: 199
+        y: 4
+        width: 50
+        height: 86
+      alignment: 9
+      pivot: {x: 0.39897645, y: 0.82304054}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a2305410000000000800000000000000
+      internalID: 21300010
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_RightHand
+      rect:
+        serializedVersion: 2
+        x: 251
+        y: 4
+        width: 93
+        height: 100
+      alignment: 9
+      pivot: {x: 0.21485294, y: 0.8283264}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c2305410000000000800000000000000
+      internalID: 21300012
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_Head
+      rect:
+        serializedVersion: 2
+        x: 347
+        y: 12
+        width: 90
+        height: 94
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e2305410000000000800000000000000
+      internalID: 21300014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_LeftHand
+      rect:
+        serializedVersion: 2
+        x: 593
+        y: 4
+        width: 87
+        height: 93
+      alignment: 9
+      pivot: {x: 0.20970206, y: 0.22843109}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 03305410000000000800000000000000
+      internalID: 21300016
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_LeftFoot
+      rect:
+        serializedVersion: 2
+        x: 681
+        y: 37
+        width: 41
+        height: 60
+      alignment: 9
+      pivot: {x: 0.5308004, y: 0.26848787}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23305410000000000800000000000000
+      internalID: 21300018
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_LeftUpLeg
+      rect:
+        serializedVersion: 2
+        x: 824
+        y: 4
+        width: 62
+        height: 93
+      alignment: 9
+      pivot: {x: 0.54073507, y: 0.8394606}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 43305410000000000800000000000000
+      internalID: 21300020
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_hip
+      rect:
+        serializedVersion: 2
+        x: 888
+        y: 4
+        width: 71
+        height: 77
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 63305410000000000800000000000000
+      internalID: 21300022
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: spineboy_LeftLeg
+      rect:
+        serializedVersion: 2
+        x: 961
+        y: 4
+        width: 50
+        height: 86
+      alignment: 9
+      pivot: {x: 0.323208, y: 0.8377242}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 83305410000000000800000000000000
+      internalID: 21300024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      spineboy_Head: 21300014
+      spineboy_body: 21300000
+      spineboy_RightUpLeg: 21300002
+      spineboy_hip: 21300022
+      spineboy_RightHand: 21300012
+      spineboy_RightArm: 21300004
+      spineboy_RightFoot: 21300008
+      spineboy_LeftFoot: 21300018
+      spineboy_LeftHand: 21300016
+      spineboy_LeftArm: 21300006
+      spineboy_LeftLeg: 21300024
+      spineboy_RightLeg: 21300010
+      spineboy_LeftUpLeg: 21300020
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
