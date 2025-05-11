@@ -5,31 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-	private static SceneController instance;
+	private static SceneController s_instance;
 
 	private void Awake()
 	{
-		if (instance == null)
+		if (s_instance == null)
 		{
-			instance = this;
+			s_instance = this;
 			DontDestroyOnLoad(this);
 		}
-		else if (instance != this)
+		else if (s_instance != this)
 		{
 			Destroy(gameObject);
 		}
 	}
 
-	public static SceneController getInstance()
+	public static SceneController GetInstance()
 	{
-		if (instance == null)
+		if (s_instance == null)
 		{
-			GameObject obj = new();
-			obj.hideFlags = HideFlags.HideAndDontSave;
-			instance = obj.AddComponent<SceneController>();
+			GameObject obj = new("SceneController");
+			s_instance = obj.AddComponent<SceneController>();
 		}
 
-		return instance;
+		return s_instance;
 	}
 
 	public void BackToMenu()
@@ -39,12 +38,12 @@ public class SceneController : MonoBehaviour
 
 	public void Restart()
 	{
-		StartCoroutine("LoadingScene", SceneManager.GetActiveScene().name);
+		StartCoroutine(LoadingScene(SceneManager.GetActiveScene().name));
 	}
 
 	public void SinglePlayer(string sceneName)
 	{
-		StartCoroutine("LoadingScene", sceneName);
+		StartCoroutine(LoadingScene(sceneName));
 	}
 
 	public void Quit()
@@ -54,7 +53,7 @@ public class SceneController : MonoBehaviour
 
 	public void LoadScene(string sceneName)
 	{
-		StartCoroutine("LoadingScene", sceneName);
+		StartCoroutine(LoadingScene(sceneName));
 	}
 
 	private IEnumerator LoadingScene(string sceneName)

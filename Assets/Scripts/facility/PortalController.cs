@@ -18,9 +18,9 @@ public class PortalController : MonoBehaviour {
 	void OnCollisionEnter2D(Collision2D other){
 		if (other.gameObject.tag.Equals ("Player")) {
 			if (backToMenu) {
-				SceneController.getInstance ().BackToMenu ();
+				SceneController.GetInstance ().BackToMenu ();
 			} else {
-				SceneController.getInstance ().LoadScene (scenename);
+				SceneController.GetInstance ().LoadScene (scenename);
 			}
 		}
 	}

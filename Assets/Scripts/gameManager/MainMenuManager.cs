@@ -13,12 +13,12 @@ public class MainMenuManager : MonoBehaviour
 		{
 			_loadScene = true;
 			loadingImage.gameObject.SetActive(true);
-			SceneController.getInstance().SinglePlayer(singlePlayerScene);
+			SceneController.GetInstance().SinglePlayer(singlePlayerScene);
 		}
 	}
 
 	public void Quit()
 	{
-		SceneController.getInstance().Quit();
+		SceneController.GetInstance().Quit();
 	}
 }

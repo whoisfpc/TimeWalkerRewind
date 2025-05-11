@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (GetComponent<DeathController>().heroDie) {
+		if (GetComponent<DeathController>().HeroDie) {
 			return;
 		}
 		if (Input.GetButtonDown ("Pause")) {
@@ -40,14 +40,14 @@ public class MenuManager : MonoBehaviour {
 	}
 
 	public void BackToMenu() {
-		SceneController.getInstance ().BackToMenu ();
+		SceneController.GetInstance ().BackToMenu ();
 	}
 
 	public void Restart() {
-		SceneController.getInstance ().Restart ();
+		SceneController.GetInstance ().Restart ();
 	}
 
 	public void Quit() {
-		SceneController.getInstance ().Quit ();
+		SceneController.GetInstance ().Quit ();
 	}
 }
