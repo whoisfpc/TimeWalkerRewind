@@ -1,37 +1,37 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class JumpingBoard : MonoBehaviour
 {
-    public float jumpPower = 20000f;
-	private bool canjump = true;
-	private float timer = 0.0f;
-	private float resumeTime = 0.5f;
-    // Use this for initialization
-    void Start()
-    {
-        
-    }
+	public float jumpPower = 20000f;
+	private bool _canJump = true;
+	private readonly float _resumeTime = 0.5f;
+	private float _timer;
 
-    // Update is called once per frame
-    void FixedUpdate()
-    {
-		if (!canjump) {
-			timer += Time.deltaTime;
+	// Update is called once per frame
+	private void FixedUpdate()
+	{
+		if (!_canJump)
+		{
+			_timer += Time.deltaTime;
 		}
-		if (timer > resumeTime) {
-			canjump = true;
-			timer = 0;
-		}
-    }
 
-    public void OnTriggerEnter2D(Collider2D collider)
-    {
-		if (canjump) {
-			Rigidbody2D rgbd = collider.GetComponent<Rigidbody2D> ();
-			rgbd.linearVelocity = new Vector2 (rgbd.linearVelocity.x, 0);
-			rgbd.AddForce (new Vector2 (0, jumpPower));
-			canjump = false;
+		if (_timer > _resumeTime)
+		{
+			_canJump = true;
+			_timer = 0;
 		}
-    }
+	}
+
+	public void OnTriggerEnter2D(Collider2D collider)
+	{
+		if (!_canJump)
+		{
+			return;
+		}
+
+		Rigidbody2D rgbd = collider.attachedRigidbody;
+		rgbd.linearVelocity = new Vector2(rgbd.linearVelocity.x, 0);
+		rgbd.AddForce(new Vector2(0, jumpPower));
+		_canJump = false;
+	}
 }

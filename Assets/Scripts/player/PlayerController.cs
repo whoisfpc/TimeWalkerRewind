@@ -319,28 +319,32 @@ public class PlayerController : MonoBehaviour {
 		return curEnergy;
 	}
 
-	public void takeDamage(int damage, Vector3 force){
-		if (!isdead) {
-			if (canBeDamaged) {
-				curhealth -= damage;
-				gameObject.GetComponent<Rigidbody2D> ().AddForce (force);
-				canBeDamaged = false;
+	public void takeDamage(int damage, Vector3 force)
+	{
+		if (isdead)
+		{
+			return;
+		}
+
+		if (canBeDamaged) {
+			curhealth -= damage;
+			gameObject.GetComponent<Rigidbody2D> ().AddForce (force);
+			canBeDamaged = false;
+		}
+		if (curhealth <= 0) {
+			isdead = true;
+			if (timeSlowState.onUsing) {
+				SwitchTimeSlow ();
 			}
-			if (curhealth <= 0) {
-				isdead = true;
-				if (timeSlowState.onUsing) {
-					SwitchTimeSlow ();
-				}
-				arm.SetActive (false);
-				GameObject armR = transform.Find ("player").Find ("spine").Find ("armR").gameObject;
-				GameObject armL = transform.Find ("player").Find ("spine").Find ("armL").gameObject;
-				armR.SetActive (true);
-				armL.SetActive (true);
-				transform.Find ("cape").gameObject.SetActive (false);
-				anim.SetTrigger ("isdead");
-				curhealth = 0;
-				//GameObject.FindGameObjectWithTag ("GameController").GetComponent<deathController> ().WakeMask ();
-			}
+			arm.SetActive (false);
+			GameObject armR = transform.Find ("player").Find ("spine").Find ("armR").gameObject;
+			GameObject armL = transform.Find ("player").Find ("spine").Find ("armL").gameObject;
+			armR.SetActive (true);
+			armL.SetActive (true);
+			transform.Find ("cape").gameObject.SetActive (false);
+			anim.SetTrigger ("isdead");
+			curhealth = 0;
+			//GameObject.FindGameObjectWithTag ("GameController").GetComponent<deathController> ().WakeMask ();
 		}
 	}
 

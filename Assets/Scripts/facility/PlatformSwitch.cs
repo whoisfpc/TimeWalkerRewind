@@ -1,47 +1,57 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class PlatformSwitch : MonoBehaviour {
-
+public class PlatformSwitch : MonoBehaviour
+{
 	public GameObject hidePlatform;
 	public bool hideOnStart = true;
-	public bool holdOnMust = false;
+	public bool holdOnMust;
 
-	private bool holding = false;
+	private bool _holding;
 
-	// Use this for initialization
-	void Start () {
-		if (hideOnStart) {
-			hidePlatform.SetActive (false);
+	private void Start()
+	{
+		if (hideOnStart)
+		{
+			hidePlatform.SetActive(false);
 		}
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (holdOnMust) {
-			if (!holding) {
-				hidePlatform.SetActive (false);
-			} else {
-				hidePlatform.SetActive (true);
+
+	private void Update()
+	{
+		if (holdOnMust)
+		{
+			if (!_holding)
+			{
+				hidePlatform.SetActive(false);
+			}
+			else
+			{
+				hidePlatform.SetActive(true);
 			}
 		}
 	}
 
-	public void OnTriggerEnter2D(Collider2D collision) {
-		if (collision.gameObject.tag == "Player") {
-			hidePlatform.SetActive (true);
+	public void OnTriggerEnter2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Player"))
+		{
+			hidePlatform.SetActive(true);
 		}
 	}
 
-	public void OnTriggerStay2D(Collider2D collision) {
-		if (collision.gameObject.tag == "Player") {
-			holding = true;
+	public void OnTriggerExit2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Player"))
+		{
+			_holding = false;
 		}
 	}
 
-	public void OnTriggerExit2D(Collider2D collision) {
-		if (collision.gameObject.tag == "Player") {
-			holding = false;
+	public void OnTriggerStay2D(Collider2D collision)
+	{
+		if (collision.CompareTag("Player"))
+		{
+			_holding = true;
 		}
 	}
 }
