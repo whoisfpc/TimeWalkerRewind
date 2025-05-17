@@ -1,17 +1,14 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class RazorController : MonoBehaviour {
+public class RazorController : MonoBehaviour
+{
 	public GameObject Line;
-	public GameObject FXef;//激光击中物体的粒子效果
-
-	public int damage = 10;//10 per sec
-	// Use this for initialization
-	// Update is called once per frame
-	void Update()
+	public GameObject FXef; //激光击中物体的粒子效果
+	
+	private void Update()
 	{
-		Vector3 scale = new Vector3(0.5f, 0.5f, 0.5f);
-		float maxRayDistance = 500f;
+		Vector3 scale = new(0.5f, 0.5f, 0.5f);
+		const float maxRayDistance = 500f;
 		int layerMask = (1 << LayerMask.NameToLayer("Platforms")) | (1 << LayerMask.NameToLayer("Player"));
 
 		RaycastHit2D hit = Physics2D.Raycast(transform.position, transform.forward, maxRayDistance, layerMask);
@@ -22,7 +19,7 @@ public class RazorController : MonoBehaviour {
 		}
 		else
 		{
-			HandleNoHit(maxRayDistance, ref scale); 
+			HandleNoHit(maxRayDistance, ref scale);
 		}
 
 		Line.transform.localScale = scale;
@@ -31,7 +28,7 @@ public class RazorController : MonoBehaviour {
 	private void HandleRaycastHit(RaycastHit2D hit, ref Vector3 scale)
 	{
 		scale.y = hit.distance;
-		
+
 		// 设置激光击中效果的位置和显示
 		FXef.transform.position = hit.point;
 		FXef.SetActive(true);
@@ -39,7 +36,7 @@ public class RazorController : MonoBehaviour {
 		// 如果击中玩家则造成伤害
 		if (hit.collider.CompareTag("Player"))
 		{
-			hit.collider.gameObject.GetComponent<PlayerController>().takeDamage(20, Vector3.zero);
+			hit.collider.GetComponent<PlayerController>().takeDamage(20, Vector3.zero);
 		}
 	}
 

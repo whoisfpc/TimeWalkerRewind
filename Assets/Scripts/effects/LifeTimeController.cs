@@ -1,21 +1,16 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System;
 
-public class LifeTimeController : MonoBehaviour {
+using UnityEngine;
+using UnityEngine.Serialization;
 
-	public float lifetime = 2.0f;
-	private float curLifeTime = 0.0f;
+public class LifeTimeController : MonoBehaviour
+{
+	[SerializeField]
+	[FormerlySerializedAs("lifetime")] 
+	private float _lifeTime = 2.0f;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		curLifeTime += Time.deltaTime;
-		if (curLifeTime > lifetime) {
-			Destroy (this.gameObject);
-		}
+	private void Start()
+	{
+		Destroy(gameObject, _lifeTime);
 	}
 }
