@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 
-public class CameraFellow : MonoBehaviour
+public class CameraFollow : MonoBehaviour
 {
 	public float smoothTimeY, smoothTimeX;
 	public GameObject player1;
-	public GameObject player2;
 	public bool bounds;
 	public Vector3 minCameraPos;
 	public Vector3 maxCameraPos;
 
 	public float cameraHeight;
 	public float cameraWidth;
-	private Vector2 velocity;
+	private Vector2 _velocity;
 
 
 	// Use this for initialization
@@ -28,8 +27,8 @@ public class CameraFellow : MonoBehaviour
 	{
 		Vector3 target = player1.transform.position;
 
-		float posX = Mathf.SmoothDamp(transform.position.x, target.x, ref velocity.x, smoothTimeX);
-		float posY = Mathf.SmoothDamp(transform.position.y, target.y, ref velocity.y, smoothTimeY);
+		float posX = Mathf.SmoothDamp(transform.position.x, target.x, ref _velocity.x, smoothTimeX);
+		float posY = Mathf.SmoothDamp(transform.position.y, target.y, ref _velocity.y, smoothTimeY);
 		if (bounds)
 		{
 			transform.position = new Vector3(Mathf.Clamp(posX, minCameraPos.x, maxCameraPos.x),

@@ -1,21 +1,25 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class MyEnergyBar : MonoBehaviour {
-
+public class MyEnergyBar : MonoBehaviour
+{
 	public Transform ForegroundBar;
-	
-	public  GameObject player;
-	// Use this for initialization
-	void Start () {
+	public GameObject player;
+
+	private PlayerController _playerCtrl;
+
+	private void Start()
+	{
+		_playerCtrl = player.GetComponent<PlayerController>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		if (player == null)
+
+	private void Update()
+	{
+		if (!_playerCtrl)
+		{
 			return;
-		PlayerController playerCtrl = player.GetComponent<PlayerController> ();
-		float energyPercent = playerCtrl.getCurEnergy() / playerCtrl.maxEnergy;
+		}
+
+		float energyPercent = _playerCtrl.getCurEnergy() / _playerCtrl.maxEnergy;
 		ForegroundBar.localScale = new Vector3(energyPercent, 1, 1);
 	}
 }

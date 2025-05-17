@@ -35,7 +35,7 @@ public class ShootController : MonoBehaviour {
 						mousePosition.z = 0.0f;
 						gunTran = gun.transform;
 						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.FromToRotation (Vector3.right, mousePosition - gunTran.position));
-						bulletInst.GetComponent<BulletController> ().source = gameObject;
+						bulletInst.GetComponent<BulletController> ().Source = gameObject;
 					} else {
 						float y = Input.GetAxis ("Aim_Y_P2");
 						float x = Input.GetAxis ("Aim_X_P2");
@@ -50,7 +50,7 @@ public class ShootController : MonoBehaviour {
 						float angle = Mathf.Atan2 (y, x) * Mathf.Rad2Deg;
 						gunTran = gun.transform;
 						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.Euler (new Vector3 (0, 0, angle)));
-						bulletInst.GetComponent<BulletController> ().source = gameObject;
+						bulletInst.GetComponent<BulletController> ().Source = gameObject;
 					}
 					nextfire = Time.time + fireRate;
 

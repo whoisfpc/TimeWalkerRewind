@@ -32,7 +32,7 @@ public class EnemyController : MonoBehaviour {
 				if(health == 0){
 					for (int i=0;i<creatEnergyBubble;i++){
 						var bubble = Instantiate(energybubble,transform.position+new Vector3(Random.Range(-10.0f,10.0f),Random.Range(-10.0f,10.0f),0.0f),Quaternion.FromToRotation(Vector3.right,new Vector3(Random.Range(-1.0f,1.0f),Random.Range(-1.0f,1.0f),0.0f)));
-						bubble.GetComponent<EnergybubbleController>().playerTran = source.transform;
+						bubble.GetComponent<EnergyBubbleController>().PlayerTran = source.transform;
 					}
 					Destroy(this.gameObject);
 				}
