@@ -770,12 +770,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16cdccc0b19a142c6a329bc5d99f65e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canBeKilled: 1
   maxHealth: 1000
-  attack: 10
   creatEnergyBubble: 5
   energybubble: {fileID: 113872, guid: 2bfc97960d5024b8c9a68e2322c328dc, type: 3}
   isBoss: 1
+  _energyBubblePrefab: {fileID: 11457706, guid: 2bfc97960d5024b8c9a68e2322c328dc,
+    type: 3}
 --- !u!60 &6011612
 PolygonCollider2D:
   m_ObjectHideFlags: 0

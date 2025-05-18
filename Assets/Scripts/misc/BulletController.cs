@@ -1,18 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
 
 using UnityEngine;
 
 public class BulletController : MonoBehaviour
 {
+	private static readonly List<Collider2D> AllTouches = new(8);
+	
 	public float speed = 300.0f;
 	public float lifetime = 5.0f;
 	public GameObject bursteffect;
-	public GameObject Source { get; set; } // who shoot the bullet
 
 	private float _life;
 	private TimeFieldController _timeFieldController;
 	private float _trueSpeed;
-	private static readonly Collider2D[] AllTouches = new Collider2D[8];
+	private GameObject _source; // who shoot the bullet
+	private bool _isPlayerBullet;
+
+	public void Setup(GameObject source, bool isPlayerBullet)
+	{
+		_source = source;
+		_isPlayerBullet = isPlayerBullet;
+	}
 
 	private void Start()
 	{
@@ -31,8 +40,7 @@ public class BulletController : MonoBehaviour
 			Destroy(gameObject);
 		}
 
-		// TODO: 不要基于名字判定，子弹逻辑需要改为射线检测
-		if (gameObject.name.Equals("enemybullet(Clone)"))
+		if (!_isPlayerBullet)
 		{
 			if (Physics2D.OverlapCircle(transform.position, 0.1f, 1 << LayerMask.NameToLayer("Platforms")))
 			{
@@ -50,20 +58,23 @@ public class BulletController : MonoBehaviour
 				Destroy(gameObject);
 			}
 		}
-
-		if (gameObject.name.Equals("bullet(Clone)"))
+		else 
 		{
+			// player shoot bullet
 			if (Physics2D.OverlapCircle(transform.position, 0.1f, 1 << LayerMask.NameToLayer("Platforms")))
 			{
 				Instantiate(bursteffect, transform.position, Quaternion.FromToRotation(Vector3.up, transform.forward));
 				Destroy(gameObject);
 			}
 
-			var size = Physics2D.OverlapCircleNonAlloc(transform.position, 0.1f, AllTouches, 1 << LayerMask.NameToLayer("Enemies"));
+			ContactFilter2D filter = new();
+			filter.NoFilter();
+			filter.SetLayerMask(1 << LayerMask.NameToLayer("Enemies"));
+			var size = Physics2D.OverlapCircle(transform.position, 0.1f, filter, AllTouches);
 			if (size > 0)
 			{
-				AllTouches[0].gameObject.GetComponent<EnemyController>().takeDamage(10,
-					(transform.right * 5000.0f) + (Vector3.up * 2000.0f), Source);
+				AllTouches[0].gameObject.GetComponent<EnemyController>().TakeDamage(10,
+					(transform.right * 5000.0f) + (Vector3.up * 2000.0f), _source);
 				Instantiate(bursteffect, transform.position, Quaternion.FromToRotation(Vector3.up, transform.forward));
 				Destroy(gameObject);
 			}

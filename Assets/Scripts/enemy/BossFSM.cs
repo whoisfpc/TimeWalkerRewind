@@ -62,7 +62,7 @@ public class BossFSM : FSM
     {
 		curState = FSMState.Patrol;
 		bossRigidbody = gameObject.GetComponent<Rigidbody2D> ();
-		maxHealth = gameObject.GetComponent<EnemyController>().health;
+		maxHealth = gameObject.GetComponent<EnemyController>().Health;
 		health = maxHealth;
 		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
 		curTimeScale = timefieldController.getTimescale (transform.position);
@@ -91,7 +91,7 @@ public class BossFSM : FSM
 		playerTran = GameObject.Find ("hero").transform;
 		//timefieldController = (timefieldController)GameObject.Find ("GameController").GetComponent<timefieldController> ();
 		curTimeScale = timefieldController.getTimescale (transform.position);
-		health = gameObject.GetComponent<EnemyController>().health;
+		health = gameObject.GetComponent<EnemyController>().Health;
 		getSideCollision ();
 
 

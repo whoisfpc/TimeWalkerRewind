@@ -1,72 +1,64 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
-public class ShootController : MonoBehaviour {
+using UnityEngine;
 
-	public bool useJoystick = false;
-
-	public string fireStr = "Fire";
+public class ShootController : MonoBehaviour
+{
+	private const string FireKeyStr = "Fire";
+	
 	public GameObject bullet;
 	public GameObject gun;
-	private Transform gunTran;
-	private Camera MainCamera;
 
-	public float fireRate = 0.2f;
-	private float nextfire = 0.0f;
+	[SerializeField]
+	private float _fireInterval = 0.2f;
+	private float EffectiveFireInterval => _fireInterval / _fireRateScale;
 
-	// Use this for initialization
-	void Start () {
-		//MainCamera = GameObject.FindGameObjectWithTag ("MainCamera");
-		if (!MainCamera){
-			MainCamera = Camera.main;
+	private float _fireRateScale = 1f;
+	private Transform _gunTran;
+	private Camera _mainCamera;
+	private float _nextFire;
+
+	private void Start()
+	{
+		_mainCamera = Camera.main;
+	}
+
+	private void Update()
+	{
+		bool isPause = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>().paused;
+		bool isDead = GetComponent<PlayerController>().HasDead();
+		if (isPause || isDead)
+		{
+			return;
 		}
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		bool isPause = GameObject.FindGameObjectWithTag ("GameController").GetComponent<MenuManager> ().paused;
-		bool isDead = GetComponent<PlayerController> ().HasDead ();
-		if (!isPause && !isDead) {
-			if (Time.time > nextfire) {
-				if (Input.GetButton(fireStr)) {
-					if (!useJoystick) {
-						Vector3 mousePosition = MainCamera.ScreenToWorldPoint (Input.mousePosition);
-						mousePosition.z = 0.0f;
-						gunTran = gun.transform;
-						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.FromToRotation (Vector3.right, mousePosition - gunTran.position));
-						bulletInst.GetComponent<BulletController> ().Source = gameObject;
-					} else {
-						float y = Input.GetAxis ("Aim_Y_P2");
-						float x = Input.GetAxis ("Aim_X_P2");
-						if (x == 0 && y == 0) {
-							y = Input.GetAxis ("Vertical_P2");
-							x = Input.GetAxis ("Horizontal_P2");
-						}
-						if (x == 0 && y == 0) {
-							y = 0;
-							x = 1;
-						}
-						float angle = Mathf.Atan2 (y, x) * Mathf.Rad2Deg;
-						gunTran = gun.transform;
-						var bulletInst = Instantiate (bullet, gunTran.position, Quaternion.Euler (new Vector3 (0, 0, angle)));
-						bulletInst.GetComponent<BulletController> ().Source = gameObject;
-					}
-					nextfire = Time.time + fireRate;
+		if (!(Time.time > _nextFire))
+		{
+			return;
+		}
 
-				}
-			}
+		if (Input.GetButton(FireKeyStr))
+		{
+			Vector3 mousePosition = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
+			mousePosition.z = 0.0f;
+			_gunTran = gun.transform;
+			GameObject bulletInst = Instantiate(bullet, _gunTran.position,
+				Quaternion.FromToRotation(Vector3.right, mousePosition - _gunTran.position));
+			bulletInst.GetComponent<BulletController>().Setup(gameObject, true);
+
+			_nextFire = Time.time + EffectiveFireInterval;
 		}
 	}
 
-
-	public void shootSpeedAccelerate(int scale ,float duration) {
-		StartCoroutine(shootSpeedAcc(scale,duration));
+	public void ShootSpeedAccelerate(int scale, float duration)
+	{
+		StartCoroutine(ShootSpeedAcc(scale, duration));
 	}
 
-	IEnumerator shootSpeedAcc(int scale ,float duration){
-		fireRate /= scale;
-		yield return new WaitForSeconds (duration);
-		fireRate *= scale;
+	private IEnumerator ShootSpeedAcc(int scale, float duration)
+	{
+		_fireRateScale = scale;
+		yield return new WaitForSeconds(duration);
+		_fireRateScale = 1f;
 	}
 }

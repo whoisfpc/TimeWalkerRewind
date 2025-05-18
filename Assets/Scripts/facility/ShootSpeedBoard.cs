@@ -7,7 +7,7 @@ public class ShootSpeedBoard : MonoBehaviour
 		Rigidbody2D rgbd = collider.attachedRigidbody;
 		if (rgbd.gameObject.CompareTag("Player"))
 		{
-			rgbd.gameObject.GetComponent<ShootController>().shootSpeedAccelerate(2, 10.0f);
+			rgbd.gameObject.GetComponent<ShootController>().ShootSpeedAccelerate(2, 10.0f);
 			Destroy(gameObject);
 		}
 	}

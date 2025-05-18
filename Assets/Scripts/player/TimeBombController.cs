@@ -1,34 +1,24 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class TimeBombController : MonoBehaviour {
-
-	private float lifeTime = 8.0f;
-	private float timer = 0.0f;
+public class TimeBombController : MonoBehaviour
+{
 	public GameObject TimeBomb;
-	// Use this for initialization
-	void Start () {
-		// TimeBomb = (GameObject)Resources.Load ("Prefebs/TimeBomb");
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		timer += Time.deltaTime;
-		if (timer > lifeTime) {
-			Destroy (this.gameObject);
-		}
+
+	private const float LifeTime = 8.0f;
+
+	private void Start()
+	{
+		Destroy(gameObject, LifeTime);
 	}
 
-	void OnCollisionEnter2D(Collision2D coll) {
-		if (!coll.gameObject.CompareTag("Player")) {
-			StartCoroutine (timeBombExplode());
+	private void OnCollisionEnter2D(Collision2D coll)
+	{
+		if (!coll.gameObject.CompareTag("Player"))
+		{
+			// TimeBomb带有“timebomb” tag，用于TimeFieldController统计和控制周围速度
+			GameObject curTimeBomb = Instantiate(TimeBomb, transform.position, Quaternion.identity);
+			curTimeBomb.transform.Find("timefield").gameObject.SetActive(true);
+			Destroy(gameObject);
 		}
-	}
-
-	IEnumerator timeBombExplode() {
-		GameObject curTimeBomb = Instantiate (TimeBomb, transform.position, Quaternion.identity) as GameObject;
-		curTimeBomb.transform.Find ("timefield").gameObject.SetActive(true);
-		Destroy (this.gameObject);
-		yield return 0;
 	}
 }

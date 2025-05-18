@@ -20,7 +20,7 @@ public class BossHealthBar : MonoBehaviour
 			return;
 		}
 
-		float healthPercent = _enemyCtrl.health / (float)_enemyCtrl.maxHealth;
+		float healthPercent = _enemyCtrl.Health / (float)_enemyCtrl.maxHealth;
 		ForegroundSprite.localScale = new Vector3(healthPercent, 1, 1);
 	}
 }
