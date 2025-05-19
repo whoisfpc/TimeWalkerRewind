@@ -101,10 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6cdc6bc2b971841ae88aba8293c9897a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laser: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
-  angle: 90
-  rotateSpeed: 30
-  iniAngle: 0
+  LaserPrefab: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
+  MaxAngle: 90
+  RotateSpeed: 30
+  InitAngle: 0
 --- !u!1 &134688
 GameObject:
   m_ObjectHideFlags: 0

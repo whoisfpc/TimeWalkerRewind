@@ -1,49 +1,51 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public class VerticalTurretController : MonoBehaviour {
+public class VerticalTurretController : MonoBehaviour
+{
+	[SerializeField]
+	private GameObject _laserPrefab;
+	[SerializeField]
+	private float _activateTime = 3.0f;
 
-	public GameObject laser;
-	private GameObject curLaser;
+	private bool _active = true;
+	private GameObject _curLaser;
+	private float _curTimeScale;
 
-	public float activateTime = 3.0f;
-	public float interval = 3.0f;
+	private TimeFieldController _timeFieldController;
+	private float _timer;
 
-	private float timer;
-	private bool active = true;
+	private void Start()
+	{
+		_curLaser = Instantiate(_laserPrefab, transform.position + (transform.up * 5.0f),
+			Quaternion.FromToRotation(Vector3.forward, transform.up));
 
-	private TimeFieldController timefieldController;
-	private float curTimeScale;
-
-	// Use this for initialization
-	void Start () {
-		// laser = (GameObject)Resources.Load ("effects/Line/Line");
-		curLaser = Instantiate (laser, transform.position + transform.up * 5.0f, Quaternion.FromToRotation (Vector3.forward, transform.up))as GameObject;
-
-		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
-		curTimeScale = timefieldController.getTimescale (transform.position);
+		_timeFieldController = GameObject.Find("GameController").GetComponent<TimeFieldController>();
+		_curTimeScale = _timeFieldController.getTimescale(transform.position);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		curTimeScale = timefieldController.getTimescale (transform.position);
 
-		timer += Time.deltaTime * curTimeScale;
+	private void Update()
+	{
+		_curTimeScale = _timeFieldController.getTimescale(transform.position);
 
-		if (active) {
-			curLaser.SetActive(true);
-			if (timer > activateTime) {
-				timer = 0;
-				active = false;
-			}
-		} else {
-			curLaser.SetActive(false);
-			if (timer > activateTime) {
-				timer = 0;
-				active = true;
+		_timer += Time.deltaTime * _curTimeScale;
+
+		if (_active)
+		{
+			_curLaser.SetActive(true);
+			if (_timer > _activateTime)
+			{
+				_timer = 0;
+				_active = false;
 			}
 		}
-
-
+		else
+		{
+			_curLaser.SetActive(false);
+			if (_timer > _activateTime)
+			{
+				_timer = 0;
+				_active = true;
+			}
+		}
 	}
 }

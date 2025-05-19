@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class BossFSM : FSM 
+public class BossFSM : Fsm 
 {
     public enum FSMState
     {
@@ -87,7 +87,7 @@ public class BossFSM : FSM
 	}
 
     //Update each frame
-    protected override void FSMUpdate(){
+    protected override void FsmUpdate(){
 		playerTran = GameObject.Find ("hero").transform;
 		//timefieldController = (timefieldController)GameObject.Find ("GameController").GetComponent<timefieldController> ();
 		curTimeScale = timefieldController.getTimescale (transform.position);
@@ -108,9 +108,8 @@ public class BossFSM : FSM
         }
 
         //Update the time
-        elapsedTime += Time.deltaTime;
 
-		if (inBattle) {
+        if (inBattle) {
 			if (Mathf.Abs(playerTran.position.x-transform.position.x) > 120.0f && health > 0) {
 				curState = FSMState.Chase;
 			} else {
@@ -337,8 +336,8 @@ public class BossFSM : FSM
 		for (int i = 0; i < 2; i++) {
 			GameObject rightFootman = Instantiate (footman, transform.position + Vector3.up * 80.0f + Vector3.right * 50.0f, this.transform.rotation)as GameObject;
 			GameObject leftFootman = Instantiate (footman, transform.position + Vector3.up * 80.0f + Vector3.left * 50.0f, this.transform.rotation)as GameObject;
-			rightFootman.GetComponent<FootmanController> ().setQuickExplode (-1);
-			leftFootman.GetComponent<FootmanController> ().setQuickExplode (1);
+			rightFootman.GetComponent<FootmanController> ().SetQuickExplode (-1);
+			leftFootman.GetComponent<FootmanController> ().SetQuickExplode (1);
 			yield return new WaitForSeconds(3.0f);
 		}
 		inOperation = false;

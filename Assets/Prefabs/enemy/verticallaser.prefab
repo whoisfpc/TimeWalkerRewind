@@ -220,6 +220,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: effa09036ab034a91910cf358f6b8a7f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laser: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
-  activateTime: 3
-  interval: 3
+  _laserPrefab: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
+  _activateTime: 3

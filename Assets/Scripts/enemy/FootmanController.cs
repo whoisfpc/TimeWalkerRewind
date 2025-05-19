@@ -1,127 +1,147 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
-public class FootmanController : MonoBehaviour {
+using UnityEngine;
+using UnityEngine.Serialization;
 
-	public float maxSpeed = 30.0f;
-	private float tempSpeed = 0.0f;
-	public int face = -1;
-	private TimeFieldController timefieldController;
-	private float curTimeScale;
-	private Animator anim;
-	public GameObject footmanExplode;
-	private Animator footmanAnim;
+public class FootmanController : MonoBehaviour
+{
+	private static readonly int IsDeadParamHash = Animator.StringToHash("isdead");
+	private static readonly int SpeedParamHash = Animator.StringToHash("Speed");
 
-	private bool startMoving = false;
-
-	private bool quickExplode = false;
-
-	private GameObject leftSide;
-	private GameObject rightSide;
-	private bool leftSideCollision = false;
-	private bool rightSideCollision = false;
-	// Use this for initialization
-	void Start () {
-		anim = transform.GetChild (0).GetComponent<Animator> ();
-		timefieldController = (TimeFieldController)GameObject.Find ("GameController").GetComponent<TimeFieldController> ();
-		curTimeScale = timefieldController.getTimescale (transform.position);
-		footmanAnim = transform.Find ("Enemy2").GetComponent<Animator> ();
-
-		// footmanExplode = (GameObject)Resources.Load ("effects/FootmanExplode_01");
-
-		leftSide = transform.Find ("LeftSide").gameObject;
-		rightSide = transform.Find ("RightSide").gameObject;
-	}
+	[FormerlySerializedAs("maxSpeed")]
+	public float MaxSpeed = 30.0f;
+	[FormerlySerializedAs("footmanExplode")]
+	public GameObject FootmanExplodePrefab;
 	
-	// Update is called once per frame
-	void Update () {
-		curTimeScale = timefieldController.getTimescale (transform.position);
+	private int _face = -1;
+	private Animator _anim;
+	private float _curTimeScale;
+	private GameObject _leftSide;
+	private bool _leftSideCollision;
+	private bool _quickExplode;
+	private GameObject _rightSide;
+	private bool _rightSideCollision;
+	private bool _startMoving;
+	private float _tempSpeed;
+	private TimeFieldController _timeFieldController;
+	private Rigidbody2D _rb2d;
 
-		if (startMoving && GetComponent<Rigidbody2D> ().linearVelocity.magnitude < 0.1f) {
-			face *= -1;
-		}
-
-		GetComponent<Rigidbody2D> ().linearVelocity = new Vector2(tempSpeed * face,GetComponent<Rigidbody2D> ().linearVelocity.y);
-		GetComponent<Rigidbody2D> ().linearVelocity = GetComponent<Rigidbody2D> ().linearVelocity * curTimeScale;
-		footmanAnim.speed = curTimeScale;
-		getSideCollision ();
-		findPlayerNearby ();
-
-		//Debug.Log (leftSideCollision +" "+rightSideCollision);
-		if (leftSideCollision) {
-			if (!quickExplode) {
-				face = 1;
-			} else {
-				//Debug.Log ("1111");
-				explodeItSelf ();
-			}
-		}
-		if (rightSideCollision) {
-			if (!quickExplode) {
-				face = -1;
-			} else {
-				explodeItSelf ();
-			}
-		}
+	private void Start()
+	{
+		_rb2d = GetComponent<Rigidbody2D>();
+		_anim = GetComponentInChildren<Animator>();
+		_timeFieldController = GameObject.Find("GameController").GetComponent<TimeFieldController>();
+		_curTimeScale = _timeFieldController.getTimescale(transform.position);
 
 
+		_leftSide = transform.Find("LeftSide").gameObject;
+		_rightSide = transform.Find("RightSide").gameObject;
 	}
 
-	void FixedUpdate() {
-		anim.SetFloat ("Speed",GetComponent<Rigidbody2D> ().linearVelocity.magnitude);
-		//Debug.Log (GetComponent<Rigidbody2D> ().velocity.magnitude);
+	private void Update()
+	{
+		_curTimeScale = _timeFieldController.getTimescale(transform.position);
+
+		if (_startMoving && _rb2d.linearVelocity.magnitude < 0.1f)
+		{
+			_face *= -1;
+		}
+
+		_rb2d.linearVelocity = new Vector2(_tempSpeed * _face, _rb2d.linearVelocity.y) * _curTimeScale;
+		_anim.SetFloat(SpeedParamHash, _rb2d.linearVelocity.magnitude);
+		_anim.speed = _curTimeScale;
+		GetSideCollision();
+		FindPlayerNearby();
+
+		if (_leftSideCollision)
+		{
+			if (!_quickExplode)
+			{
+				_face = 1;
+			}
+			else
+			{
+				ExplodeItSelf();
+			}
+		}
+
+		if (_rightSideCollision)
+		{
+			if (!_quickExplode)
+			{
+				_face = -1;
+			}
+			else
+			{
+				ExplodeItSelf();
+			}
+		}
 	}
 
-	void findPlayerNearby (){
-		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
-		foreach (var player in players) {
+	private void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.collider.CompareTag("map") && !_startMoving)
+		{
+			_startMoving = true;
+			_tempSpeed = MaxSpeed;
+		}
+	}
+
+	private void FindPlayerNearby()
+	{
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (GameObject player in players)
+		{
 			Vector3 playerPos = player.transform.position;
-			if (Vector3.Distance (playerPos, transform.position)<20.0f) {
-				maxSpeed = 0;
-				anim.SetBool ("isdead", true);
-				StartCoroutine(explode());
+			if (Vector3.Distance(playerPos, transform.position) < 20.0f)
+			{
+				MaxSpeed = 0;
+				_anim.SetBool(IsDeadParamHash, true);
+				StartCoroutine(Explode());
 			}
 		}
 	}
 
-	IEnumerator explode() {
-		tempSpeed = 0.0f;
-		for (float timer = 1.5f;timer>0.0f;timer-= Time.deltaTime * curTimeScale){
+	private IEnumerator Explode()
+	{
+		_tempSpeed = 0.0f;
+		for (float timer = 1.5f; timer > 0.0f; timer -= Time.deltaTime * _curTimeScale)
+		{
 			yield return 0;
 		}
-		//gameObject.GetComponent<BoxCollider2D> ().isTrigger = false;
-		Instantiate(footmanExplode,this.transform.position,this.transform.rotation);
-		GameObject[] players = GameObject.FindGameObjectsWithTag ("Player");
-		foreach (var player in players) {
+
+		Instantiate(FootmanExplodePrefab, transform.position, transform.rotation);
+		GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+		foreach (GameObject player in players)
+		{
 			Vector3 playerPos = player.transform.position;
-			if (Vector3.Distance (playerPos, transform.position)<30.0f) {
-				player.GetComponent<PlayerController> ().takeDamage (40,(playerPos-transform.position).normalized*2000.0f);
+			if (Vector3.Distance(playerPos, transform.position) < 30.0f)
+			{
+				player.GetComponent<PlayerController>()
+					.takeDamage(40, (playerPos - transform.position).normalized * 2000.0f);
 			}
 		}
-		Destroy (this.gameObject);
+
+		Destroy(gameObject);
 	}
 
-	private void getSideCollision(){
-		leftSideCollision = Physics2D.Linecast(transform.position, leftSide.transform.position, 1 << LayerMask.NameToLayer("Platforms")|1 << LayerMask.NameToLayer("OneWayPlatforms"));
-		rightSideCollision = Physics2D.Linecast(transform.position, rightSide.transform.position, 1 << LayerMask.NameToLayer("Platforms")|1 << LayerMask.NameToLayer("OneWayPlatforms"));
+	private void GetSideCollision()
+	{
+		_leftSideCollision = Physics2D.Linecast(transform.position, _leftSide.transform.position,
+			(1 << LayerMask.NameToLayer("Platforms")) | (1 << LayerMask.NameToLayer("OneWayPlatforms")));
+		_rightSideCollision = Physics2D.Linecast(transform.position, _rightSide.transform.position,
+			(1 << LayerMask.NameToLayer("Platforms")) | (1 << LayerMask.NameToLayer("OneWayPlatforms")));
 	}
 
-	public void explodeItSelf(){
-		anim.SetBool ("isdead", true);
-		StartCoroutine(explode());
+	private void ExplodeItSelf()
+	{
+		_anim.SetBool(IsDeadParamHash, true);
+		StartCoroutine(Explode());
 	}
 
-	public void setQuickExplode(int tempface){
-		quickExplode = true;
-		face *= tempface;
-		//maxSpeed *= 2;
+	public void SetQuickExplode(int tempFace)
+	{
+		_quickExplode = true;
+		_face *= tempFace;
 	}
-
-	void OnCollisionEnter2D(Collision2D other){
-		if (other.collider.tag.Equals ("map") && !startMoving) {
-			startMoving = true;
-			tempSpeed = maxSpeed;
-		}
-	}
-
 }
