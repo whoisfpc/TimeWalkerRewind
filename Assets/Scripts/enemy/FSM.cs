@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Fsm : MonoBehaviour
+public abstract class Fsm : MonoBehaviour
 {
 	private void Start()
 	{

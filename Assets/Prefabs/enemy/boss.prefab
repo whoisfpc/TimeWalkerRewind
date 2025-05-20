@@ -731,17 +731,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b0b0dd5444888486096234af151f7d23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curState: 0
-  chargeForce: 30000
-  shootInterval: 0.8
-  facingRight: 1
-  patrolSpeed: 30
-  missile: {fileID: 150952, guid: 331e50e07aa1f4be89f3d6991772627c, type: 3}
-  footman: {fileID: 113172, guid: 32af7454640c24984916c4abe5bb8721, type: 3}
-  patrolDistance: 100
-  enemybullet: {fileID: 125726, guid: bcc3f6e3c131e4e57bd4b89f10bf841c, type: 3}
-  razor: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
-  missileExplode: {fileID: 187560, guid: 0ff95eb9e8a714a7ba7e5ca1a40c3d58, type: 3}
+  CurState: 0
+  ChargeForce: 30000
+  FacingRight: 1
+  PatrolSpeed: 30
+  Missile: {fileID: 150952, guid: 331e50e07aa1f4be89f3d6991772627c, type: 3}
+  Footman: {fileID: 113172, guid: 32af7454640c24984916c4abe5bb8721, type: 3}
+  PatrolDistance: 100
+  EnemyBulletPrefab: {fileID: 125726, guid: bcc3f6e3c131e4e57bd4b89f10bf841c, type: 3}
+  LaserPrefab: {fileID: 100000, guid: b87b996291e47ad40a4a4c074f772d6e, type: 3}
+  MissileExplodePrefab: {fileID: 187560, guid: 0ff95eb9e8a714a7ba7e5ca1a40c3d58, type: 3}
 --- !u!114 &11458392
 MonoBehaviour:
   m_ObjectHideFlags: 0
