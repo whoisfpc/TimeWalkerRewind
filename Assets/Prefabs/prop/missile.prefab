@@ -103,7 +103,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a68c31ca79df54a0cb3782863dffb7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  missileExplode: {fileID: 187560, guid: 0ff95eb9e8a714a7ba7e5ca1a40c3d58, type: 3}
+  MissileExplode: {fileID: 187560, guid: 0ff95eb9e8a714a7ba7e5ca1a40c3d58, type: 3}
 --- !u!114 &11414420
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -118,7 +118,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 20
   creatEnergyBubble: 0
-  energybubble: {fileID: 113872, guid: 2bfc97960d5024b8c9a68e2322c328dc, type: 3}
   isBoss: 0
   _energyBubblePrefab: {fileID: 11457706, guid: 2bfc97960d5024b8c9a68e2322c328dc,
     type: 3}

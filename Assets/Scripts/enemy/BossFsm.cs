@@ -53,7 +53,7 @@ public class BossFsm : Fsm
 		if (other.collider.CompareTag("Player"))
 		{
 			_hitPlayer = true;
-			other.collider.gameObject.GetComponent<PlayerController>().takeDamage(10,
+			other.collider.gameObject.GetComponent<PlayerController>().TakeDamage(10,
 				(other.collider.transform.position - transform.position).normalized * 100.0f);
 		}
 	}

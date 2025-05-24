@@ -27,19 +27,19 @@ public class MySkillBar : MonoBehaviour
 		SkillState timeBombState = playerCtrl.GetSkillState("TimeBomb");
 		SkillState timeBackState = playerCtrl.GetSkillState("TimeBack");
 
-		intRemainTime = (int)Mathf.Ceil(timeSlowState.remainCD);
+		intRemainTime = (int)Mathf.Ceil(timeSlowState.RemainCd);
 		timeSlowText.text = intRemainTime > 0 ? intRemainTime.ToString() : "";
-		timeSlowIcon.color = timeSlowState.lackEnergy ? lackEnergyColor : canUseColor;
+		timeSlowIcon.color = timeSlowState.LackEnergy ? lackEnergyColor : canUseColor;
 		timeSlowMask.fillAmount = 0;
 
-		intRemainTime = (int)Mathf.Ceil(timeBombState.remainCD);
+		intRemainTime = (int)Mathf.Ceil(timeBombState.RemainCd);
 		timeBombText.text = intRemainTime > 0 ? intRemainTime.ToString() : "";
-		timeBombIcon.color = timeBombState.lackEnergy ? lackEnergyColor : canUseColor;
-		timeBombMask.fillAmount = timeBombState.remainCD / playerCtrl.timeBombCD;
+		timeBombIcon.color = timeBombState.LackEnergy ? lackEnergyColor : canUseColor;
+		timeBombMask.fillAmount = timeBombState.RemainCd / playerCtrl.TimeBombCd;
 
-		intRemainTime = (int)Mathf.Ceil(timeBackState.remainCD);
+		intRemainTime = (int)Mathf.Ceil(timeBackState.RemainCd);
 		timeBackText.text = intRemainTime > 0 ? intRemainTime.ToString() : "";
-		timeBackIcon.color = timeBackState.lackEnergy ? lackEnergyColor : canUseColor;
-		timeBackMask.fillAmount = timeBackState.remainCD / playerCtrl.backCD;
+		timeBackIcon.color = timeBackState.LackEnergy ? lackEnergyColor : canUseColor;
+		timeBackMask.fillAmount = timeBackState.RemainCd / playerCtrl.BackCd;
 	}
 }

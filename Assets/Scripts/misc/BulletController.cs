@@ -53,7 +53,7 @@ public class BulletController : MonoBehaviour
 			if (playerCol)
 			{
 				playerCol.GetComponent<PlayerController>()
-					.takeDamage(10, (transform.right * 5000.0f) + (Vector3.up * 2000.0f));
+					.TakeDamage(10, (transform.right * 5000.0f) + (Vector3.up * 2000.0f));
 				Instantiate(bursteffect, transform.position, Quaternion.FromToRotation(Vector3.up, transform.forward));
 				Destroy(gameObject);
 			}

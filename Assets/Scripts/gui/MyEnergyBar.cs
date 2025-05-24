@@ -19,7 +19,7 @@ public class MyEnergyBar : MonoBehaviour
 			return;
 		}
 
-		float energyPercent = _playerCtrl.getCurEnergy() / _playerCtrl.maxEnergy;
+		float energyPercent = _playerCtrl.GetCurEnergy() / _playerCtrl.MaxEnergy;
 		ForegroundBar.localScale = new Vector3(energyPercent, 1, 1);
 	}
 }

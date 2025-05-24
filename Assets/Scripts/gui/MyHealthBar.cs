@@ -20,7 +20,7 @@ public class MyHealthBar : MonoBehaviour
 			return;
 		}
 
-		float healthPercent = _playerCtrl.getCurHealth() / _playerCtrl.maxHealth;
+		float healthPercent = _playerCtrl.GetCurHealth() / _playerCtrl.MaxHealth;
 		ForegroundSprite.localScale = new Vector3(healthPercent, 1, 1);
 	}
 }

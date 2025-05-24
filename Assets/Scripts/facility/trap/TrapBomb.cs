@@ -67,7 +67,7 @@ public class TrapBomb : MonoBehaviour
 		{
 			if (Vector3.Distance(p.transform.position, transform.position) < boomArea)
 			{
-				p.GetComponent<PlayerController>().takeDamage(10, Vector3.zero);
+				p.GetComponent<PlayerController>().TakeDamage(10, Vector3.zero);
 			}
 		}
 

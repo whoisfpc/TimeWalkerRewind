@@ -68,7 +68,7 @@ public class MissileController : MonoBehaviour
 		Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, 10.0f, 1 << LayerMask.NameToLayer("Player"));
 		foreach (var hit in hits)
 		{
-			hit.gameObject.GetComponent<PlayerController>().takeDamage(MissileDamage, -transform.right * 100.0f);
+			hit.gameObject.GetComponent<PlayerController>().TakeDamage(MissileDamage, -transform.right * 100.0f);
 		}
 	}
 }

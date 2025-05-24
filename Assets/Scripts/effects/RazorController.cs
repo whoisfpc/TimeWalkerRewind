@@ -36,7 +36,7 @@ public class RazorController : MonoBehaviour
 		// 如果击中玩家则造成伤害
 		if (hit.collider.CompareTag("Player"))
 		{
-			hit.collider.GetComponent<PlayerController>().takeDamage(20, Vector3.zero);
+			hit.collider.GetComponent<PlayerController>().TakeDamage(20, Vector3.zero);
 		}
 	}
 

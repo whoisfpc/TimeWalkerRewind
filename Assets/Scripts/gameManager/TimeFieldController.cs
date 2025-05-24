@@ -25,7 +25,7 @@ public class TimeFieldController : MonoBehaviour
 		for (int i = 0; i < players.Length; i++)
 		{
 			SkillState timeSlowState = players[i].GetComponent<PlayerController>().GetSkillState("TimeSlow");
-			if (timeSlowState.onUsing)
+			if (timeSlowState.OnUsing)
 			{
 				_timePoints.Add(players[i].transform.position);
 			}

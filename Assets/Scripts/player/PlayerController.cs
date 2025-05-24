@@ -1,410 +1,443 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
 
-public class PlayerController : MonoBehaviour {
+using UnityEngine;
+using UnityEngine.Serialization;
 
-	public bool useJoystick = false;
-	public Transform gunTran;
-	public GameObject gunLight;
-	public GameObject timeField;
-	public GameObject TimeBombProto;
+public class PlayerController : MonoBehaviour
+{
+	private static readonly int CrouchParamHash = Animator.StringToHash("Crouch");
+	private static readonly int GroundParamHash = Animator.StringToHash("Ground");
+	private static readonly int ForwardParamHash = Animator.StringToHash("Forward");
+	private static readonly int SpeedParamHash = Animator.StringToHash("Speed");
+	private static readonly int VSpeedParamHash = Animator.StringToHash("vSpeed");
+	private static readonly int IsDeadParamHash = Animator.StringToHash("isdead");
 
 	/* input name for controller */
-	public string horzionalStr = "Horizontal";
-	public string verticalStr = "Vertical";
-	public string jumpStr = "Jump";
-	public string lightStr = "Light";
-	public string timeSlowStr = "TimeSlow";
-	public string timeBombStr = "TimeBomb";
-	public string timeBackStr = "TimeBack";
+	private const string HorizontalStr = "Horizontal";
+	private const string VerticalStr = "Vertical";
+	private const string JumpStr = "Jump";
+	private const string LightStr = "Light";
+	private const string TimeSlowStr = "TimeSlow";
+	private const string TimeBombStr = "TimeBomb";
+	private const string TimeBackStr = "TimeBack";
+
+	public Transform GunTran;
+	public GameObject GunLight;
+	public GameObject TimeField;
+	public GameObject TimeBombProto;
 
 	/* player property */
-	public float maxHealth = 100;
-	public float maxEnergy = 100f;
-	public float moveForce = 500f;
-	public float maxSpeed = 60f;				// The fastest the player can travel in the x axis.
-	public float jumpForce = 12000f;			// Amount of force added when the player jumps.
-	public int maxjumpTime = 2;
-	[Range(0, 1)]public float backSpeed = 0.7f; // backward walk speed percent
-	public float energyRestorePersecond = 2f;
-	public float maxRestoreEnergy = 30f;
+	public float MaxHealth = 100;
+	public float MaxEnergy = 100f;
+	public float MaxSpeed = 60f;
+	public float JumpForce = 12000f;
+	public int MaxJumpTime = 2;
+	[Range(0, 1)]
+	public float BackSpeed = 0.7f; // backward walk speed percent
+	public float EnergyRestorePerSecond = 2f;
+	public float MaxRestoreEnergy = 30f;
 
 	/* skill attribute */
-	public float timeSlowEnergyPerSecond = 5f;
-	public float timeSlowStartUpEnergy = 10f;
-	public float backToPastTime = 2f;
-	public float backCD = 5f;
-	public float backToPastEnergy = 30f;
-	public float timeBombEnergy = 33f;
-	public float timeBombCD = 10f;
+	public float TimeSlowEnergyPerSecond = 5f;
+	public float TimeSlowStartUpEnergy = 10f;
+	public float BackToPastTime = 2f;
+	public float BackCd = 5f;
+	public float BackToPastEnergy = 30f;
+	public float TimeBombEnergy = 33f;
+	public float TimeBombCd = 10f;
+	
+	public bool FacingRight { get; private set; } = true;
 
-	/* private variable */
-	private float curhealth = 100;
-	private float curEnergy = 100f;
-	private bool canBeDamaged = true;
-	private float canBeDamagedTimer = 0f;
+	public bool IsDead { get; private set; }
 
-	private Transform groundCheck;			// A position marking where to check if the player is grounded.
-	private bool grounded = false;			// Whether or not the player is grounded.
+	private Rigidbody2D _rb2d;
+	private Animator _anim; 
+	private readonly ArrayList _backPositions = new();
+	private bool _canBeDamaged = true;
+	private float _canBeDamagedTimer;
+	private float _curEnergy = 100f;
 
-	private int jumpTime = 0;
-	private bool jump = false;
-	private bool facingRight = true;		// For determining which way the player is currently facing.
-	private ArrayList backPositions = new ArrayList(); 
-	private GameObject m_Cape;
-	private Animator anim;					// Reference to the player's animator component.
-	public GameObject arm;
-	private bool isPause;
+	private float _curHealth = 100;
 
-	/* Skill states */
-	private SkillState timeSlowState = new SkillState("TimeSlow");
-	private SkillState timeBackState = new SkillState("TimeBack");
-	private SkillState timeBombState = new SkillState("TimeBomb");
+	private Transform _groundCheck; // A position marking where to check if the player is grounded.
+	private bool _grounded; // Whether the player is grounded.
 
-	private bool isdead = false;
+	private bool _isPause;
+	private bool _jump;
 
-	void Awake () {
-		// Setting up references.
-		groundCheck = transform.Find("groundCheck");
-		anim = transform.Find ("player").GetComponent<Animator> ();
+	private int _jumpTime;
+	private GameObject _cape;
+	private readonly SkillState _timeBackState = new("TimeBack");
+	private readonly SkillState _timeBombState = new("TimeBomb");
+	private readonly SkillState _timeSlowState = new("TimeSlow");
+
+	private void Awake()
+	{
+		_rb2d = GetComponent<Rigidbody2D>();
+		_groundCheck = transform.Find("groundCheck");
+		_anim = transform.Find("player").GetComponent<Animator>();
 	}
 
-	// Use this for initialization
-	void Start () {
-		m_Cape = transform.Find ("cape").gameObject;
+	private void Start()
+	{
+		_cape = transform.Find("cape").gameObject;
 
-		curhealth = maxHealth;
-		curEnergy = maxEnergy;
+		_curHealth = MaxHealth;
+		_curEnergy = MaxEnergy;
 	}
 
-	// Update is called once per frame
-	void Update () {
-		isPause = GameObject.FindGameObjectWithTag ("GameController").GetComponent<MenuManager> ().paused;
+	private void Update()
+	{
+		_isPause = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>().paused;
 
-		// test to determine wether player is on ground
-		int groundLayerMask = 1 << LayerMask.NameToLayer ("Platforms") | 1 << LayerMask.NameToLayer ("OneWayPlatforms") | 1 << LayerMask.NameToLayer ("Enemies") | 1 << LayerMask.NameToLayer("Player");
-		Collider2D[] colliders = Physics2D.OverlapCircleAll(groundCheck.position, 2 , groundLayerMask);
-		grounded = false;
+		// test to determine whether player is on ground
+		int groundLayerMask = (1 << LayerMask.NameToLayer("Platforms")) |
+		                      (1 << LayerMask.NameToLayer("OneWayPlatforms")) |
+		                      (1 << LayerMask.NameToLayer("Enemies")) | (1 << LayerMask.NameToLayer("Player"));
+		Collider2D[] colliders = Physics2D.OverlapCircleAll(_groundCheck.position, 2, groundLayerMask);
+		_grounded = false;
 		for (int i = 0; i < colliders.Length; i++)
 		{
 			if (colliders[i].gameObject != gameObject)
-				grounded = true;
-		}
-
-
-		if (isPause || isdead) {
-			return;
-		}
-
-		/* all input respone will disable when game is paused */
-		if (Input.GetButtonDown (jumpStr)) {
-			jump = true;
-		}
-
-		if (grounded) {
-			jumpTime = maxjumpTime;
-		}
-
-		if (!grounded && jumpTime == maxjumpTime) {
-			jumpTime--;
-		}
-		if (Input.GetAxis(verticalStr) < 0) {
-			anim.SetBool ("Crouch", true);
-		} else {
-			if (!Physics2D.Linecast (transform.position, transform.Find ("headCheck").position, 1 << LayerMask.NameToLayer ("Platforms"))) {
-				anim.SetBool ("Crouch", false);
+			{
+				_grounded = true;
 			}
 		}
 
-		if ((Input.GetAxis(verticalStr) < 0) && Physics2D.Linecast (transform.position, groundCheck.position, 1 << LayerMask.NameToLayer ("OneWayPlatforms"))) {
-			Collider2D[] tempOneWayPlatform = Physics2D.OverlapCircleAll(groundCheck.position,10.0f,1 << LayerMask.NameToLayer ("OneWayPlatforms"));
-			for (int i = 0; i < tempOneWayPlatform.Length; i++) {
-				tempOneWayPlatform[i].transform.gameObject.GetComponent<BoxCollider2D> ().isTrigger = true;
+
+		if (_isPause || IsDead)
+		{
+			return;
+		}
+
+		/* all input response will disable when game is paused */
+		if (Input.GetButtonDown(JumpStr))
+		{
+			_jump = true;
+		}
+
+		if (_grounded)
+		{
+			_jumpTime = MaxJumpTime;
+		}
+
+		if (!_grounded && _jumpTime == MaxJumpTime)
+		{
+			_jumpTime--;
+		}
+
+		if (Input.GetAxis(VerticalStr) < 0)
+		{
+			_anim.SetBool(CrouchParamHash, true);
+		}
+		else
+		{
+			if (!Physics2D.Linecast(transform.position, transform.Find("headCheck").position,
+				    1 << LayerMask.NameToLayer("Platforms")))
+			{
+				_anim.SetBool(CrouchParamHash, false);
+			}
+		}
+
+		if (Input.GetAxis(VerticalStr) < 0 && Physics2D.Linecast(transform.position, _groundCheck.position,
+			    1 << LayerMask.NameToLayer("OneWayPlatforms")))
+		{
+			Collider2D[] tempOneWayPlatform = Physics2D.OverlapCircleAll(_groundCheck.position, 10.0f,
+				1 << LayerMask.NameToLayer("OneWayPlatforms"));
+			for (int i = 0; i < tempOneWayPlatform.Length; i++)
+			{
+				tempOneWayPlatform[i].transform.gameObject.GetComponent<BoxCollider2D>().isTrigger = true;
 			}
 		}
 
 		// Automatic energy recover
-		if (curEnergy < maxRestoreEnergy) {
-			curEnergy += energyRestorePersecond * Time.deltaTime;
-			if (curEnergy > maxRestoreEnergy) {
-				curEnergy = maxRestoreEnergy;
+		if (_curEnergy < MaxRestoreEnergy)
+		{
+			_curEnergy += EnergyRestorePerSecond * Time.deltaTime;
+			if (_curEnergy > MaxRestoreEnergy)
+			{
+				_curEnergy = MaxRestoreEnergy;
 			}
 		}
 
-		float lookRight;
+		Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+		mousePosition.z = 0.0f;
+		Vector3 lookDir = mousePosition - transform.position;
+		float lookRight = lookDir.x;
 
-		if (!useJoystick) {
-			Vector3 mousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			mousePosition.z = 0.0f;
-			Vector3 lookDir = mousePosition - transform.position;
-			lookRight = lookDir.x;
-		} else {
-			lookRight = Input.GetAxis ("Aim_X_P2");
-			if (lookRight == 0) {
-				lookRight = Input.GetAxis (horzionalStr);
-			}
-
-			if (lookRight == 0) {
-				lookRight = 1;
-			}
-		}
-		if (isdead) {
+		if (IsDead)
+		{
 			lookRight = 1;
 		}
-		if (lookRight > 0 && !facingRight) {
-			Cloth cl = m_Cape.gameObject.GetComponent<Cloth> ();
-			CapsuleCollider[] old_ca = cl.capsuleColliders;
+
+		if (lookRight > 0 && !FacingRight)
+		{
+			Cloth cl = _cape.gameObject.GetComponent<Cloth>();
+			CapsuleCollider[] oldCa = cl.capsuleColliders;
 			cl.capsuleColliders = new CapsuleCollider[0];
-			Flip ();
-			cl.capsuleColliders = old_ca;
-		} else if (lookRight < 0 && facingRight) {
-			Cloth cl = m_Cape.gameObject.GetComponent<Cloth> ();
-			CapsuleCollider[] old_ca = cl.capsuleColliders;
+			Flip();
+			cl.capsuleColliders = oldCa;
+		}
+		else if (lookRight < 0 && FacingRight)
+		{
+			Cloth cl = _cape.gameObject.GetComponent<Cloth>();
+			CapsuleCollider[] oldCa = cl.capsuleColliders;
 			cl.capsuleColliders = new CapsuleCollider[0];
-			Flip ();
-			cl.capsuleColliders = old_ca;
+			Flip();
+			cl.capsuleColliders = oldCa;
 		}
 
 		/* Deal with skill input */
 
 		// open or close light
-		if (Input.GetButtonDown(lightStr)) {
-			gunLight.SetActive (!gunLight.activeSelf);
+		if (Input.GetButtonDown(LightStr))
+		{
+			GunLight.SetActive(!GunLight.activeSelf);
 		}
 
 		// ope or close time slow field
-		if (Input.GetButtonDown (timeSlowStr)) {
-			SwitchTimeSlow ();
+		if (Input.GetButtonDown(TimeSlowStr))
+		{
+			SwitchTimeSlow();
 		}
+
 		// Continuous consume energy while time slow field is opening
-		if (timeSlowState.onUsing) {
-			if (!useEnergy(timeSlowEnergyPerSecond * Time.deltaTime)) {
-				timeField.SetActive (false);
-				curEnergy = 0;
-				timeSlowState.onUsing = false;
+		if (_timeSlowState.OnUsing)
+		{
+			if (!UseEnergy(TimeSlowEnergyPerSecond * Time.deltaTime))
+			{
+				TimeField.SetActive(false);
+				_curEnergy = 0;
+				_timeSlowState.OnUsing = false;
 			}
 		}
-		timeSlowState.lackEnergy = curEnergy < timeSlowStartUpEnergy;
-		timeSlowState.canUse = !timeSlowState.lackEnergy && (timeSlowState.remainCD == 0);
+
+		_timeSlowState.LackEnergy = _curEnergy < TimeSlowStartUpEnergy;
+		_timeSlowState.CanUse = !_timeSlowState.LackEnergy && _timeSlowState.RemainCd == 0;
 
 		// try to shoot time bomb
-		timeBombState.remainCD = Mathf.Max (0, timeBombState.remainCD - Time.deltaTime);
-		if (Input.GetButtonDown (timeBombStr)) {
-			ShootTimeBomb ();
+		_timeBombState.RemainCd = Mathf.Max(0, _timeBombState.RemainCd - Time.deltaTime);
+		if (Input.GetButtonDown(TimeBombStr))
+		{
+			ShootTimeBomb();
 		}
-		timeBombState.lackEnergy = curEnergy < timeBombEnergy;
-		timeBombState.canUse = !timeBombState.lackEnergy && (timeBombState.remainCD == 0);
+
+		_timeBombState.LackEnergy = _curEnergy < TimeBombEnergy;
+		_timeBombState.CanUse = !_timeBombState.LackEnergy && _timeBombState.RemainCd == 0;
 
 		// try to use time back
-		timeBackState.remainCD = Mathf.Max (0, timeBackState.remainCD - Time.deltaTime);
-		if (Input.GetButtonDown (timeBackStr)) {
-			UseTimeBack ();
+		_timeBackState.RemainCd = Mathf.Max(0, _timeBackState.RemainCd - Time.deltaTime);
+		if (Input.GetButtonDown(TimeBackStr))
+		{
+			UseTimeBack();
 		}
-		timeBackState.lackEnergy = curEnergy < backToPastEnergy;
-		timeBackState.canUse = !timeBackState.lackEnergy && (timeBackState.remainCD == 0);
+
+		_timeBackState.LackEnergy = _curEnergy < BackToPastEnergy;
+		_timeBackState.CanUse = !_timeBackState.LackEnergy && _timeBackState.RemainCd == 0;
 	}
 
-	void FixedUpdate (){
-		if (isPause || isdead) {
+	private void FixedUpdate()
+	{
+		if (_isPause || IsDead)
+		{
 			return;
 		}
-		anim.SetBool ("Ground",grounded);
-		float h = Input.GetAxis(horzionalStr);
-		if (isPause) {
+
+		_anim.SetBool(GroundParamHash, _grounded);
+		float h = Input.GetAxis(HorizontalStr);
+		if (_isPause)
+		{
 			h = 0;
 		}
 
 		bool forward;
-		if ((facingRight && h > 0) || (!facingRight && h < 0)) {
+		if ((FacingRight && h > 0) || (!FacingRight && h < 0))
+		{
 			forward = true;
-		} else {
+		}
+		else
+		{
 			forward = false;
 		}
-		anim.SetBool ("Forward", forward);
+
+		_anim.SetBool(ForwardParamHash, forward);
 		float temp = 1;
-		if (!forward) {
-			temp = backSpeed;
-		}
-		GetComponent<Rigidbody2D> ().linearVelocity = new Vector2(h * temp * maxSpeed,GetComponent<Rigidbody2D> ().linearVelocity.y);
-		anim.SetFloat("Speed",Mathf.Abs(GetComponent<Rigidbody2D> ().linearVelocity.x * h));
-		if (jumpTime > 0 && jump) {
-			GetComponent<Rigidbody2D> ().linearVelocity = new Vector2 (GetComponent<Rigidbody2D> ().linearVelocity.x, 0.0f);
-			GetComponent<Rigidbody2D> ().AddForce (Vector2.up * jumpForce);
-			jumpTime--;
-			jump = false;
+		if (!forward)
+		{
+			temp = BackSpeed;
 		}
 
-		if (backPositions.Count >= backToPastTime * 50) {
-			backPositions.RemoveAt(0);
+		_rb2d.linearVelocity = new Vector2(h * temp * MaxSpeed, _rb2d.linearVelocity.y);
+		_anim.SetFloat(SpeedParamHash, Mathf.Abs(_rb2d.linearVelocity.x * h));
+		if (_jumpTime > 0 && _jump)
+		{
+			_rb2d.linearVelocity = new Vector2(_rb2d.linearVelocity.x, 0.0f);
+			_rb2d.AddForce(Vector2.up * JumpForce);
+			_jumpTime--;
+			_jump = false;
 		}
-		backPositions.Add (transform.position);
-		anim.SetFloat("vSpeed", GetComponent<Rigidbody2D> ().linearVelocity.y/20.0f);
-		if (!canBeDamaged) {
-			canBeDamagedTimer += Time.deltaTime;
-			if (canBeDamagedTimer > 1.0f) {
-				canBeDamagedTimer = 0.0f;
-				canBeDamaged = true;
+
+		if (_backPositions.Count >= BackToPastTime * 50)
+		{
+			_backPositions.RemoveAt(0);
+		}
+
+		_backPositions.Add(transform.position);
+		_anim.SetFloat(VSpeedParamHash, _rb2d.linearVelocity.y / 20.0f);
+		if (!_canBeDamaged)
+		{
+			_canBeDamagedTimer += Time.deltaTime;
+			if (_canBeDamagedTimer > 1.0f)
+			{
+				_canBeDamagedTimer = 0.0f;
+				_canBeDamaged = true;
 			}
 		}
 	}
 
-	void Flip (){
-		// Switch the way the player is labelled as facing.
-		facingRight = !facingRight;
-
-		// Multiply the player's x local scale by -1.
+	private void Flip()
+	{
+		FacingRight = !FacingRight;
 		Vector3 theScale = transform.localScale;
 		theScale.x *= -1;
 		transform.localScale = theScale;
 	}
 
-	void UseTimeBack() {
-		if (timeBackState.canUse) {
-			if (useEnergy (backToPastEnergy)) {
-				transform.Translate ((Vector3)backPositions [0] - transform.position);
-				timeBackState.remainCD = backCD;
-			}
-		}
-	}
-
-	void SwitchTimeSlow() {
-		if (!timeSlowState.onUsing) {
-			if (useEnergy(timeSlowStartUpEnergy)) {
-				timeSlowState.onUsing = true;
-				timeField.SetActive (true);
-			}
-		} else {
-			timeSlowState.onUsing = false;
-			timeField.SetActive (false);
-		}
-	}
-
-
-	void ShootTimeBomb() {
-		if (timeBombState.canUse) {
-			if (useEnergy (timeBombEnergy)) {
-				if (!useJoystick) {
-					Vector3 mousePosition = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-					mousePosition.z = 0.0f;
-					GameObject curBomb = Instantiate (TimeBombProto, gunTran.position, Quaternion.FromToRotation (Vector3.right, mousePosition - gunTran.position)) as GameObject;
-					curBomb.GetComponent<Rigidbody2D> ().AddForce ((mousePosition - gunTran.position).normalized * 5000.0f);
-				} else {
-					float y = Input.GetAxis ("Aim_Y_P2");
-					float x = Input.GetAxis ("Aim_X_P2");
-					if (x == 0 && y == 0) {
-						y = Input.GetAxis ("Vertical_P2");
-						x = Input.GetAxis ("Horizontal_P2");
-					}
-					if (x == 0 && y == 0) {
-						y = 0;
-						x = 1;
-					}
-					GameObject curBomb = Instantiate (TimeBombProto, gunTran.position, Quaternion.identity) as GameObject;
-					curBomb.GetComponent<Rigidbody2D> ().AddForce ((new Vector2 (x, y)).normalized * 5000.0f);
-				}
-				timeBombState.remainCD = timeBombCD;
-			}
-		}
-	}
-
-	public Vector3 getVelocity(){
-		return GetComponent<Rigidbody2D> ().linearVelocity;
-	}
-
-	public float getCurHealth(){
-		return curhealth;
-	}
-
-	public float getCurEnergy(){
-		return curEnergy;
-	}
-
-	public void takeDamage(int damage, Vector3 force)
+	private void UseTimeBack()
 	{
-		if (isdead)
+		if (_timeBackState.CanUse && UseEnergy(BackToPastEnergy))
+		{
+			transform.Translate((Vector3)_backPositions[0] - transform.position);
+			_timeBackState.RemainCd = BackCd;
+		}
+	}
+
+	private void SwitchTimeSlow()
+	{
+		if (!_timeSlowState.OnUsing)
+		{
+			if (UseEnergy(TimeSlowStartUpEnergy))
+			{
+				_timeSlowState.OnUsing = true;
+				TimeField.SetActive(true);
+			}
+		}
+		else
+		{
+			_timeSlowState.OnUsing = false;
+			TimeField.SetActive(false);
+		}
+	}
+
+
+	private void ShootTimeBomb()
+	{
+		if (_timeBombState.CanUse)
+		{
+			if (UseEnergy(TimeBombEnergy))
+			{
+				Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+				mousePosition.z = 0.0f;
+				GameObject curBomb = Instantiate(TimeBombProto, GunTran.position,
+					Quaternion.FromToRotation(Vector3.right, mousePosition - GunTran.position));
+				curBomb.GetComponent<Rigidbody2D>()
+					.AddForce((mousePosition - GunTran.position).normalized * 5000.0f);
+
+				_timeBombState.RemainCd = TimeBombCd;
+			}
+		}
+	}
+
+	public float GetCurHealth()
+	{
+		return _curHealth;
+	}
+
+	public float GetCurEnergy()
+	{
+		return _curEnergy;
+	}
+
+	public void TakeDamage(int damage, Vector3 force)
+	{
+		if (IsDead)
 		{
 			return;
 		}
 
-		if (canBeDamaged) {
-			curhealth -= damage;
-			gameObject.GetComponent<Rigidbody2D> ().AddForce (force);
-			canBeDamaged = false;
+		if (_canBeDamaged)
+		{
+			_curHealth -= damage;
+			_rb2d.AddForce(force);
+			_canBeDamaged = false;
 		}
-		if (curhealth <= 0) {
-			isdead = true;
-			if (timeSlowState.onUsing) {
-				SwitchTimeSlow ();
+
+		if (_curHealth <= 0)
+		{
+			_curHealth = 0;
+			IsDead = true;
+			if (_timeSlowState.OnUsing)
+			{
+				SwitchTimeSlow();
 			}
-			arm.SetActive (false);
-			GameObject armR = transform.Find ("player").Find ("spine").Find ("armR").gameObject;
-			GameObject armL = transform.Find ("player").Find ("spine").Find ("armL").gameObject;
-			armR.SetActive (true);
-			armL.SetActive (true);
-			transform.Find ("cape").gameObject.SetActive (false);
-			anim.SetTrigger ("isdead");
-			curhealth = 0;
-			//GameObject.FindGameObjectWithTag ("GameController").GetComponent<deathController> ().WakeMask ();
+
+			_cape.gameObject.SetActive(false);
+			_anim.SetTrigger(IsDeadParamHash);
 		}
 	}
 
-	public void restoreHealth(int restore){
-		curhealth += restore;
-		if (curhealth > maxHealth) {
-			curhealth = maxHealth;
-		}
+	public void RestoreHealth(int restore)
+	{
+		_curHealth = Mathf.Min(restore + _curHealth, MaxHealth);
 	}
 
-	public void restoreEnergy(int restore){
-		curEnergy += restore;
-		if (curEnergy > maxEnergy) {
-			curEnergy = maxEnergy;
-		}
+	public void RestoreEnergy(int restore)
+	{
+		_curEnergy = Mathf.Min(restore + _curEnergy, MaxEnergy);
 	}
 
-	public bool getFacingRight(){
-		return facingRight;
-	}
-
-	public bool useEnergy(float energy){
-		if (curEnergy >= energy) {
-			curEnergy -= energy;
+	private bool UseEnergy(float energy)
+	{
+		if (_curEnergy >= energy)
+		{
+			_curEnergy -= energy;
 			return true;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
-	public SkillState GetSkillState(string skillName) {
-		switch (skillName) {
-			case "TimeSlow":
-				return timeSlowState;
-			case "TimeBack":
-				return timeBackState;
-			case "TimeBomb":
-				return timeBombState;
-			default:
-				return null;
-		}
+	public SkillState GetSkillState(string skillName)
+	{
+		return skillName switch
+		{
+			"TimeSlow" => _timeSlowState,
+			"TimeBack" => _timeBackState,
+			"TimeBomb" => _timeBombState,
+			_ => null
+		};
 	}
 
-	public bool HasDead() {
-		return isdead;
+	public bool HasDead()
+	{
+		return IsDead;
 	}
 }
 
-public class SkillState {
-	public string skillName;
-	public float remainCD;
-	public bool onUsing;
-	public bool canUse;
-	public bool lackEnergy;
+public class SkillState
+{
+	public bool CanUse;
+	public bool LackEnergy;
+	public bool OnUsing;
+	public float RemainCd;
+	public string SkillName;
 
-	public SkillState(string skillName) {
-		this.skillName = skillName;
-		this.remainCD = 0;
-		this.onUsing = false;
-		this.canUse = true;
-		this.lackEnergy = false;
+	public SkillState(string skillName)
+	{
+		this.SkillName = skillName;
+		RemainCd = 0;
+		OnUsing = false;
+		CanUse = true;
+		LackEnergy = false;
 	}
 }

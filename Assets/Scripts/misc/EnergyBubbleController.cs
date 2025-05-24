@@ -32,7 +32,7 @@ public class EnergyBubbleController : MonoBehaviour
 
 		if (Physics2D.OverlapCircle(transform.position, 0.1f, 1 << LayerMask.NameToLayer("Player")))
 		{
-			PlayerTran.gameObject.GetComponent<PlayerController>().restoreEnergy(5);
+			PlayerTran.gameObject.GetComponent<PlayerController>().RestoreEnergy(5);
 			Destroy(gameObject);
 		}
 	}

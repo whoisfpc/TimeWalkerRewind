@@ -6,7 +6,7 @@ public class HealthBoard : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			collider.GetComponent<PlayerController>().restoreHealth(50);
+			collider.GetComponent<PlayerController>().RestoreHealth(50);
 			Destroy(gameObject);
 		}
 	}

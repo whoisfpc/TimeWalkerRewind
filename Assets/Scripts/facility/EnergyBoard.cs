@@ -6,7 +6,7 @@ public class EnergyBoard : MonoBehaviour
 	{
 		if (collider.CompareTag("Player"))
 		{
-			collider.GetComponent<PlayerController>().restoreEnergy(50);
+			collider.GetComponent<PlayerController>().RestoreEnergy(50);
 			Destroy(gameObject);
 		}
 	}

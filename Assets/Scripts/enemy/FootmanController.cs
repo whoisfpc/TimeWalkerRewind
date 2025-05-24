@@ -118,7 +118,7 @@ public class FootmanController : MonoBehaviour
 			if (Vector3.Distance(playerPos, transform.position) < 30.0f)
 			{
 				player.GetComponent<PlayerController>()
-					.takeDamage(40, (playerPos - transform.position).normalized * 2000.0f);
+					.TakeDamage(40, (playerPos - transform.position).normalized * 2000.0f);
 			}
 		}
 
