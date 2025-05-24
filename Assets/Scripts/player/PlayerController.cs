@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
 
 	private void Update()
 	{
-		_isPause = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>().paused;
+		_isPause = MenuManager.Instance.Paused;
 
 		// test to determine whether player is on ground
 		int groundLayerMask = (1 << LayerMask.NameToLayer("Platforms")) |

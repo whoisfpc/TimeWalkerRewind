@@ -12,8 +12,7 @@ public class ArmRotate : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		bool isPause = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>().paused;
-		if (isPause || _player.IsDead)
+		if (MenuManager.Instance.Paused || _player.IsDead)
 		{
 			return;
 		}

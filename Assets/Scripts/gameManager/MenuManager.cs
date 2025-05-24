@@ -1,53 +1,64 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 
-public class MenuManager : MonoBehaviour {
-
+public class MenuManager : SingletonBehaviour<MenuManager>
+{
 	public GameObject pauseUI;
-	public Image loadingImage;
-	public bool paused{ get; private set; }
+	public bool Paused { get; private set; }
 
 	// Use this for initialization
-	void Start () {
-		pauseUI.SetActive (false);
-		paused = false;
+	private void Start()
+	{
+		pauseUI.SetActive(false);
+		Paused = false;
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
-		if (GetComponent<DeathController>().HeroDie) {
+	private void Update()
+	{
+		if (GetComponent<DeathController>().HeroDie)
+		{
 			return;
 		}
-		if (Input.GetButtonDown ("Pause")) {
-			paused = !paused;
+
+		if (Input.GetButtonDown("Pause"))
+		{
+			Paused = !Paused;
 		}
-		if (paused) {
-			pauseUI.SetActive (true);
+
+		if (Paused)
+		{
+			pauseUI.SetActive(true);
 			Time.timeScale = 0;
-		} else {
-			pauseUI.SetActive (false);
+		}
+		else
+		{
+			pauseUI.SetActive(false);
 			Time.timeScale = 1;
 		}
 	}
 
-	public void Resume() {
-		paused = false;
+	public void Resume()
+	{
+		Paused = false;
 	}
 
-	public void Pause() {
-		paused = true;
+	public void Pause()
+	{
+		Paused = true;
 	}
 
-	public void BackToMenu() {
-		SceneController.GetInstance ().BackToMenu ();
+	public void BackToMenu()
+	{
+		SceneController.GetInstance().BackToMenu();
 	}
 
-	public void Restart() {
-		SceneController.GetInstance ().Restart ();
+	public void Restart()
+	{
+		SceneController.GetInstance().Restart();
 	}
 
-	public void Quit() {
-		SceneController.GetInstance ().Quit ();
+	public void Quit()
+	{
+		SceneController.GetInstance().Quit();
 	}
 }

@@ -25,9 +25,8 @@ public class ShootController : MonoBehaviour
 
 	private void Update()
 	{
-		bool isPause = GameObject.FindGameObjectWithTag("GameController").GetComponent<MenuManager>().paused;
 		bool isDead = GetComponent<PlayerController>().HasDead();
-		if (isPause || isDead)
+		if (MenuManager.Instance.Paused || isDead)
 		{
 			return;
 		}
